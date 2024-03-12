@@ -1,60 +1,56 @@
 package com.mycompany.app;
+import org.junit.jupiter.api.Test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.mycompany.app.App.processLists;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+public class AppTest {
+    @Test
+    void testWithCommonElementsWithinRange() {
+        ArrayList<Integer> list1 = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+        ArrayList<Integer> list2 = new ArrayList<>(Arrays.asList(3, 4, 5, 6, 7));
+        assertArrayEquals(new int[]{12, 3}, processLists(list1, list2, 1, 5));
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
+    @Test
+    void testWithCommonElementsOutsideRange() {
+        ArrayList<Integer> list1 = new ArrayList<>(Arrays.asList(10, 20, 30));
+        ArrayList<Integer> list2 = new ArrayList<>(Arrays.asList(20, 30, 40, 50));
+        assertArrayEquals(new int[]{50, 2},processLists(list1, list2, 15, 35));
     }
 
-    /**
-     * Rigourous Test :-)
-     */
-   /* public void testApp()
-    {
-        assertTrue( true );
-    }*/
-    public void testFound() {
-        ArrayList<Integer> array = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
-        assertTrue(new App().search(array, 4));
+    @Test
+    void testWithNoCommonElements() {
+        ArrayList<Integer> list1 = new ArrayList<>(Arrays.asList(1, 2, 3));
+        ArrayList<Integer> list2 = new ArrayList<>(Arrays.asList(4, 5, 6));
+        assertArrayEquals(new int[]{0, 0}, processLists(list1, list2, 1, 6));
     }
 
-    public void testNotFound() {
-        ArrayList<Integer> array = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
-        assertFalse(new App().search(array, 5));
+    @Test
+    void testWithBothListsEmpty() {
+        ArrayList<Integer> list1 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
+        assertArrayEquals(new int[]{0, 0}, processLists(list1, list2, 1, 10));
     }
 
-    public void testEmptyArray() {
-        ArrayList<Integer> array = new ArrayList<>();
-        assertFalse(new App().search(array, 1));
+    @Test
+    void testWithOneListEmpty() {
+        ArrayList<Integer> list1 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>(Arrays.asList(1, 2, 3));
+        assertArrayEquals(new int[]{0, 0}, processLists(list1, list2, 1, 3));
     }
 
-    public void testNull() {
-        assertFalse(new App().search(null, 1));
+    @Test
+    void testWithMinMaxOutOfRange() {
+        ArrayList<Integer> list1 = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50));
+        ArrayList<Integer> list2 = new ArrayList<>(Arrays.asList(15, 25, 35, 45, 55));
+        assertArrayEquals(new int[]{0, 0}, processLists(list1, list2, 60, 70));
     }
-
 }
